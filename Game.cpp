@@ -1,6 +1,10 @@
+// Sarah Wilkinson,  s.z.wilkinson@wustl.edu
+// Ethan Gray, ethan.gray@wustl.edu
+// This file contains the implementations for the member functions of the Game class. 
+
 #include "Game.h"
 #include <string>
-// pass two less args into here for both params
+// add as many players as the number of players given to the game
 Game::Game(int argc, const char *argv[])
 {
 
@@ -10,7 +14,8 @@ Game::Game(int argc, const char *argv[])
     }
 }
 
-// move to Game class
+// ask the user if they would like to play another round of their game or to end the game.
+//check if they say yes or no.
 bool Game::promptEndGame()
 {
     std::string response;

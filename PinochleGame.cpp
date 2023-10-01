@@ -1,5 +1,10 @@
+// Sarah Wilkinson,  s.z.wilkinson@wustl.edu
+// Ethan Gray, ethan.gray@wustl.edu
+// This file contains the implementations for the PinochleGame class's member functions. 
+
 #include "PinochleGame.h"
 
+//create hands for all players in a pinochle game
 PinochleGame::PinochleGame(int argc, const char *argv[]) : Game(argc, argv)
 {
 
@@ -11,6 +16,8 @@ PinochleGame::PinochleGame(int argc, const char *argv[]) : Game(argc, argv)
     }
 }
 
+//repeatedly shift three cards (called a "packet") from the deck to the hand of each player in turn 
+//until all cards in the deck have been distributed
 void PinochleGame::deal()
 {
 
@@ -31,6 +38,12 @@ void PinochleGame::deal()
     }
 }
 
+//a single round of Pinochle consists of these steps in the following order:
+//1. shuffle deck
+//2. deal to players
+//3. print all cards in players' hands
+//4. return all player cards to deck
+//5/6. ask to play another round and await input
 int PinochleGame::play()
 {
     bool end_game_flag = false;
@@ -47,6 +60,7 @@ int PinochleGame::play()
     return SUCCESS;
 }
 
+//return all cards in player hands to deck
 void PinochleGame::collectHands()
 {
     for (std::vector<CardSet<Suit, pinRank>>::iterator i = hands.begin(); i != hands.end(); i++)
@@ -55,6 +69,7 @@ void PinochleGame::collectHands()
     }
 }
 
+//print every card in every player's hand
 void PinochleGame::printPlayersCurrentHands()
 {
     int counter = 0;

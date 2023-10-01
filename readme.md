@@ -7,7 +7,19 @@ errors:
 1. template argument deduction/substitution failed
 The cause of this error was a circular dependency. To fix this we removed the extra includes that were creating this circular dependency.
 2. a template argument may not reference a variable-length array type
-This was caused due to trying to pass an array to the shared_ptr that initializes a game with a size value that is not initiated until run time. After learning that you can't use a run time value for the size of an array, we modified our logic to pass in the whole argv into the respective Game constructors and handling the player list logic there instead of in the lab1.cpp file.
+This was caused due to trying to pass an array to the shared_ptr that initializes a game with a size value that is not initiated until run time.
+After learning that you can't use a run time value for the size of an array, we modified our logic to pass in the whole argv into the respective
+Game constructors and handling the player list logic there instead of in the lab1.cpp file.
+3. We were getting this error for no command line arguments given:
+
+-bash-4.2$ ./lab1
+terminate called after throwing an instance of 'std::logic_error'
+  what():  basic_string::_M_construct null not valid
+Aborted
+
+Caused by trying to convert nothing into a string.
+We fixed it by adding a condition check for more than one command line argument before anything else happens in the main.
+
 
 Successful runs:
 
@@ -69,12 +81,26 @@ BOARD(river):10  4  5  K  4
 would you like to end the game? yes or no: 
 yes
 
-5. Poker w/ wrong number of players
+5. Poker w/ wrong number of players with proper exit codes
 
-[e.h.gray@linuxlab002 Lab1]$ ./lab1 Holdem j
+-bash-4.2$ ./lab1 Pinochle
 Usage: ./lab1 GAMENAME Player1 Player2 Player3 ... PlayerN
 HoldEm: 2-9 players
 Pinochle: 4 players
+-bash-4.2$ echo $?
+3
+-bash-4.2$ ./lab1 Pinochle P l i
+Usage: ./lab1 GAMENAME Player1 Player2 Player3 ... PlayerN
+HoldEm: 2-9 players
+Pinochle: 4 players
+-bash-4.2$ echo $?
+3
 
+6. no additional command line arguments given beyond program name with proper exit code
 
-
+-bash-4.2$ ./lab1
+Usage: ./lab1 GAMENAME Player1 Player2 Player3 ... PlayerN
+HoldEm: 2-9 players
+Pinochle: 4 players
+-bash-4.2$ echo $?
+2

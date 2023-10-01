@@ -1,6 +1,10 @@
+// Sarah Wilkinson,  s.z.wilkinson@wustl.edu
+// Ethan Gray, ethan.gray@wustl.edu
+// This file contains the implementations of the HoldEmGame class's member functions.
+
 #include "HoldEmGame.h"
 
-
+//create a hand for each player in the game
 HoldEmGame::HoldEmGame(int argc, const char *argv[]) : Game(argc, argv), state(HoldEmState::preflop)
 {
     // push back a hand for every player in the game
@@ -11,23 +15,25 @@ HoldEmGame::HoldEmGame(int argc, const char *argv[]) : Game(argc, argv), state(H
     }
 }
 
+//distribute the next card(s) according to the current state of the game.
 void HoldEmGame::deal()
 {
-
+    //if the state is preflop, then deal two cards to each player and then increment state
     if (state == HoldEmState::preflop)
     {
 
-        for (int i = 0; i < static_cast<int>(players.size()); i++)
+        for (int i = 0; i <static_cast<int>(players.size()); i++)
         {
             deck >> hands.at(i);
         }
-        for (int i = 0; i < static_cast<int>(players.size()); i++)
+        for (int i = 0; i <static_cast<int>(players.size()); i++)
         {
             deck >> hands.at(i);
         }
 
         state = HoldEmState::flop;
     }
+    //if the state is flop, then deal three cards to the board and increment state
     if (state == HoldEmState::flop)
     {
 
@@ -37,12 +43,13 @@ void HoldEmGame::deal()
         }
         state = HoldEmState::turn;
     }
+    //if the state is turn, then deal three cards to the board and increment state
     if (state == HoldEmState::turn)
     {
         deck >> board;
         state = HoldEmState::river;
     }
-
+    //if the state is river, then deal three cards to the board and increment state
     if (state == HoldEmState::river)
     {
         deck >> board;
@@ -50,6 +57,20 @@ void HoldEmGame::deal()
     }
 }
 
+//a single play in a Texas Hold Em game consists of these steps in the following order:
+//1. shuffle the deck
+//2. set the state to preflop
+//3. deal two cards to each hand and proceed to flop
+//4. print each player's cards
+//5. deal three cards to the board and proceed to turn
+//6. print all cards on the board
+//7. deal one more card to the board and proceed to river
+//8. print all cards on the board
+//9. deal one more card to the board 
+//10. print all cards on the board
+//11. collect all players' cards and return them to deck
+//12. collect all board cards and return them to deck
+//13/14. ask to play another round and await input
 int HoldEmGame::play()
 {
     bool end_game_flag = false;
@@ -76,6 +97,7 @@ int HoldEmGame::play()
     return SUCCESS;
 }
 
+//print every card on the board
 void HoldEmGame::printBoard(const char *segment)
 {
     int BOARD_SIZE = 5;
@@ -83,6 +105,7 @@ void HoldEmGame::printBoard(const char *segment)
     board.print(std::cout, BOARD_SIZE);
 }
 
+//print every card in each of the players hands
 void HoldEmGame::printPlayersCurrentHands()
 {
     int counter = 0;
