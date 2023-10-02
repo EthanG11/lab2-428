@@ -56,45 +56,36 @@ Pinochle: 4 players
 [e.h.gray@linuxlab002 Lab1]$ ./lab1 Chess j a d
 Game not successfuly created.
 
-4. Poker with 3 players
-[e.h.gray@linuxlab002 Lab1]$ ./lab1 Holdem j a d
-j: K  A  
+4. Poker with 2 players
+[e.h.gray@linuxlab002 428Lab1]$ ./lab1 Holdem a b
+a: 6  2  
 
-a: 2  8  
+b: 10  5  
 
-d: 4  2  
+BOARD(flop):9  5  8  
+BOARD(turn):9  5  8  7  
+BOARD(river):9  5  8  7  2  
+nould you like to end the game? yes or no: 
+a: 9  5  
 
-BOARD(flop):K  4  J  2  3  
-BOARD(turn):K  4  J  2  3  
-BOARD(river):K  4  J  2  3  
-would you like to end the game? yes or no: 
-no
-j: 6  2  
+b: 3  9  
 
-a: 10  6  
-
-d: 7  K  
-
-BOARD(flop):10  4  5  K  4  
-BOARD(turn):10  4  5  K  4  
-BOARD(river):10  4  5  K  4  
+BOARD(flop):A  8  K  
+BOARD(turn):A  8  K  10  
+BOARD(river):A  8  K  10  6  
 would you like to end the game? yes or no: 
 yes
 
+
 5. Poker w/ wrong number of players with proper exit codes
 
--bash-4.2$ ./lab1 Pinochle
+-bash-4.2$ ./lab1 Holdem a
 Usage: ./lab1 GAMENAME Player1 Player2 Player3 ... PlayerN
 HoldEm: 2-9 players
 Pinochle: 4 players
 -bash-4.2$ echo $?
 3
--bash-4.2$ ./lab1 Pinochle P l i
-Usage: ./lab1 GAMENAME Player1 Player2 Player3 ... PlayerN
-HoldEm: 2-9 players
-Pinochle: 4 players
--bash-4.2$ echo $?
-3
+
 
 6. no additional command line arguments given beyond program name with proper exit code
 
