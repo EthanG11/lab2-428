@@ -1,6 +1,6 @@
 // Sarah Wilkinson,  s.z.wilkinson@wustl.edu
 // Ethan Gray, ethan.gray@wustl.edu
-// This file contains the function definitions for the pinochle class, including the constructor and print(), as well as
+// This file contains the function definitions for the pinochleDeck class, including the constructor and print(), as well as
 //  pinochleRank << overload and pinochleRank ++ overload.
 
 #include "pinochle.h"

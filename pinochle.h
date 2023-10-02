@@ -1,6 +1,7 @@
 // Sarah Wilkinson,  s.z.wilkinson@wustl.edu
 // Ethan Gray, ethan.gray@wustl.edu
-// This file contains the pinochle class, which uses its own rank type and has its own rules about how to assemble its game deck.
+// This file contains the pinochleDeck class, which inherits the Deck template class. 
+// This class uses its own rank type and has its own rules about how to assemble its game deck.
 // It also provides functions to increment and print this specific rank type.
 
 #pragma once

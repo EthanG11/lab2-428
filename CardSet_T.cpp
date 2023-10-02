@@ -1,5 +1,11 @@
+// Sarah Wilkinson,  s.z.wilkinson@wustl.edu
+// Ethan Gray, ethan.gray@wustl.edu
+// This file contains the implementations for the member functions of the CardSet_T template class.
+// print(), operator>>(), and is_empty()
+
 #include "CardSet_T.h"
 
+//print every card in the set
 template <typename Suit, typename Rank>
 void CardSet<Suit, Rank>::print(std::ostream &o, size_t cardsPerLine)
 {
@@ -22,6 +28,7 @@ void CardSet<Suit, Rank>::print(std::ostream &o, size_t cardsPerLine)
     }
 }
 
+//use the >> operator to push an equivalent last card onto the set
 template <typename Suit, typename Rank>
 CardSet<Suit, Rank> &CardSet<Suit, Rank>::operator>>(CardSet<Suit, Rank> &set)
 {
@@ -47,6 +54,7 @@ CardSet<Suit, Rank> &CardSet<Suit, Rank>::operator>>(CardSet<Suit, Rank> &set)
     return *this;
 }
 
+//check if the set has no cards
 template <typename Suit, typename Rank>
 bool CardSet<Suit, Rank>::is_empty()
 {
