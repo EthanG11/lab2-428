@@ -32,5 +32,5 @@ protected:
     std::vector<CardSet<Suit, pokerRank>> hands;
     CardSet<Suit, pokerRank> board; //the common board of cards that is shared by the players in the game
     virtual void deal();
-    void printBoard(const char *input);
+    void printBoard(const char *input, int numCards);
 };

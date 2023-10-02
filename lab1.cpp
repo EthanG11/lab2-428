@@ -82,7 +82,7 @@ int main(int argc, const char* argv[])
     //if texas hold em was not given the correct number of players
     else if (input.compare(poker) == 0)
     {
-        if (num_players <= MIN_POKER_PLAYERS || num_players >= MAX_POKER_PLAYERS)
+        if (num_players < MIN_POKER_PLAYERS || num_players > MAX_POKER_PLAYERS)
         {
             usage();
             return INCORRECT_NUM_PLAYERS;

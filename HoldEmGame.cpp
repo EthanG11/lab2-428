@@ -34,7 +34,7 @@ void HoldEmGame::deal()
         state = HoldEmState::flop;
     }
     //if the state is flop, then deal three cards to the board and increment state
-    if (state == HoldEmState::flop)
+    else if (state == HoldEmState::flop)
     {
 
         for (int i = 0; i < 3; i++)
@@ -44,13 +44,13 @@ void HoldEmGame::deal()
         state = HoldEmState::turn;
     }
     //if the state is turn, then deal three cards to the board and increment state
-    if (state == HoldEmState::turn)
+   else if (state == HoldEmState::turn)
     {
         deck >> board;
         state = HoldEmState::river;
     }
     //if the state is river, then deal three cards to the board and increment state
-    if (state == HoldEmState::river)
+   else if (state == HoldEmState::river)
     {
         deck >> board;
         state = HoldEmState::undefined;
@@ -73,6 +73,11 @@ void HoldEmGame::deal()
 //13/14. ask to play another round and await input
 int HoldEmGame::play()
 {
+    int NUM_FLOP_CARDS = 3;
+    int NUM_TURN_CARDS = 4;
+    int NUM_RIVER_CARDS = 5;
+
+
     bool end_game_flag = false;
     while (!end_game_flag)
     {
@@ -81,11 +86,11 @@ int HoldEmGame::play()
         deal();
         printPlayersCurrentHands();
         deal();
-        printBoard("flop");
+        printBoard("flop",NUM_FLOP_CARDS );
         deal();
-        printBoard("turn");
+        printBoard("turn",NUM_TURN_CARDS);
         deal();
-        printBoard("river");
+        printBoard("river", NUM_RIVER_CARDS);
 
         for (int i = 0; i < static_cast<int>(players.size()); i++)
         {
@@ -98,11 +103,10 @@ int HoldEmGame::play()
 }
 
 //print every card on the board
-void HoldEmGame::printBoard(const char *segment)
+void HoldEmGame::printBoard(const char *segment, int numCards)
 {
-    int BOARD_SIZE = 5;
     std::cout << "BOARD(" << segment << "):";
-    board.print(std::cout, BOARD_SIZE);
+    board.print(std::cout, numCards);
 }
 
 //print every card in each of the players hands

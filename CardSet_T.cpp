@@ -10,7 +10,6 @@ template <typename Suit, typename Rank>
 void CardSet<Suit, Rank>::print(std::ostream &o, size_t cardsPerLine)
 {
 
-    ;
 
     size_t counter = 0;
 
