@@ -9,14 +9,16 @@
 #include <istream>
 #include <stdexcept>
 
-//the set of cards that are only allowed in the deck for a given game type.
+// the set of cards that are only allowed in the deck for a given game type.
 template <typename Suit, typename Rank>
 class CardSet
 {
 public:
     void print(std::ostream &o, size_t size);
-    CardSet<Suit, Rank> & operator>>(CardSet<Suit, Rank> &set); //use the >> operator to push an equivalent last card onto the set
+    CardSet<Suit, Rank> &operator>>(CardSet<Suit, Rank> &set); // use the >> operator to push an equivalent last card onto the set
     bool is_empty();
+    CardSet(const CardSet<Suit, Rank> &);
+    CardSet() = default;
 
 protected:
     std::vector<Card<Suit, Rank>> cards;
