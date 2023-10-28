@@ -7,9 +7,7 @@
 #include "pinochle.h"
 #include <vector>
 #include "Game.h"
-#include "CardSet_T.h"
 #include "Suits.h"
-#include "card_T.h"
 #include <iostream>
 #include <list>
 
@@ -54,6 +52,6 @@ private:
     void suit_independent_evaluation(const CardSet<Suit, pinRank> &x, std::vector<PinochleMelds> &vec);
 };
 
-void checkAllEightCards(std::vector<Card<Suit, pinRank>>::iterator startOfGivenCard, std::vector<Card<Suit, pinRank>>::iterator onePastEndOfGivenCard);
+void checkAllEightCards(std::vector<Card<Suit, pinRank>> &cards, pinRank card, std::vector<PinochleMelds> &vec);
 
-std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator> getCardRange(const std::vector<Card<Suit, pinRank>> &cards, const pinRank card);
+std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator> const getCardRange(std::vector<Card<Suit, pinRank>> &cards, pinRank card);

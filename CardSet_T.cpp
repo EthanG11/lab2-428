@@ -62,7 +62,9 @@ bool CardSet<Suit, Rank>::is_empty()
     }
     return false;
 }
+
 template <typename Suit, typename Rank>
+
 std::vector<Card<Suit, Rank>> CardSet<Suit, Rank>::*access_cards()
 {
     return &CardSet<Suit, Rank>::cards;

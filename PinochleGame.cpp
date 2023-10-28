@@ -118,7 +118,7 @@ void PinochleGame::printPlayersCurrentHands()
     }
 }
 
-std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::reverse_iterator> const getCardRange(std::vector<Card<Suit, pinRank>> &cards, pinRank card)
+std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator> const getCardRange(std::vector<Card<Suit, pinRank>> &cards, pinRank card)
 {
     std::vector<Card<Suit, pinRank>>::iterator it = std::find_if(
         cards.begin(), cards.end(), [&card](Card<Suit, pinRank> current)
@@ -128,10 +128,10 @@ std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pin
                                                                           { return current.rank == card; });
     end = end++;
 
-    return std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::reverse_iterator>(it, end);
+    return std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator>(it, end.base());
 }
 
-void checkAllEightCards(const std::vector<Card<Suit, pinRank>> &cards, pinRank card, std::vector<PinochleMelds> &vec)
+void checkAllEightCards(std::vector<Card<Suit, pinRank>> &cards, pinRank card, std::vector<PinochleMelds> &vec)
 {
     // check for 8
     int counter = 0;

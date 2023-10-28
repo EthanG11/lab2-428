@@ -17,6 +17,7 @@ public:
     void print(std::ostream &o, size_t size);
     CardSet<Suit, Rank> &operator>>(CardSet<Suit, Rank> &set); // use the >> operator to push an equivalent last card onto the set
     bool is_empty();
+
     static std::vector<Card<Suit, Rank>> CardSet<Suit, Rank>::*access_cards();
 
 protected:
