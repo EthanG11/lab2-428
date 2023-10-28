@@ -15,7 +15,7 @@ void CardSet<Suit, Rank>::print(std::ostream &o, size_t cardsPerLine)
     for (typename std::vector<Card<Suit, Rank>>::iterator i = cards.begin(); i != cards.end(); i++)
     {
 
-        o << (*i).rank << " ";
+        o << (*i).rank << (*i).suit << " ";
         counter++;
 
         if (counter == cardsPerLine)
@@ -65,7 +65,7 @@ bool CardSet<Suit, Rank>::is_empty()
 
 template <typename Suit, typename Rank>
 
-std::vector<Card<Suit, Rank>> CardSet<Suit, Rank>::*access_cards()
+std::vector<Card<Suit, Rank>> CardSet<Suit, Rank>::*CardSet<Suit, Rank>::access_cards()
 {
     return &CardSet<Suit, Rank>::cards;
 }
