@@ -84,6 +84,7 @@
     "cinttypes": "cpp",
     "typeindex": "cpp",
     "typeinfo": "cpp",
-    "hashtable": "cpp"
+    "hashtable": "cpp",
+    "bit": "cpp"
   }
 }

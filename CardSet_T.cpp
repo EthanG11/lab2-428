@@ -62,12 +62,8 @@ bool CardSet<Suit, Rank>::is_empty()
     }
     return false;
 }
-
 template <typename Suit, typename Rank>
-CardSet<Suit, Rank>::CardSet(const CardSet<Suit, Rank> &card_set)
+std::vector<Card<Suit, Rank>> CardSet<Suit, Rank>::*access_cards()
 {
-    while (!card_set.is_empty())
-    {
-        card_set >> this;
-    }
+    return &CardSet<Suit, Rank>::cards;
 }

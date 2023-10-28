@@ -16,6 +16,7 @@ struct Card
 	R rank;
 	Card(){};
 	Card(S s, R r) : suit(s), rank(r){};
+	bool operator==(const Card<S, R>) const;
 };
 
 template <typename S, typename R>
@@ -26,3 +27,7 @@ bool compare_1(const Card<S, R> &card1, const Card<S, R> &card2);
 
 template <typename S, typename R>
 bool compare_2(const Card<S, R> &card1, const Card<S, R> &card2);
+
+#ifdef TEMPLATE_HEADERS_INCLUDE_SOURCE
+#include "card_T.cpp"
+#endif

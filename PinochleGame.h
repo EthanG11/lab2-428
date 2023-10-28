@@ -1,6 +1,6 @@
 // Sarah Wilkinson,  s.z.wilkinson@wustl.edu
 // Ethan Gray, ethan.gray@wustl.edu
-// This file contains the PinochleGame class, which inherits the Game class. 
+// This file contains the PinochleGame class, which inherits the Game class.
 // This class has its own specific deck.
 
 #pragma once
@@ -9,9 +9,31 @@
 #include "Game.h"
 #include "CardSet_T.h"
 #include "Suits.h"
+#include "card_T.h"
 #include <iostream>
+#include <list>
 
-//a class to create/play a game of Pinochle
+enum class PinochleMelds
+{
+    dix,
+    offsuitmarriage,
+    fortyjacks,
+    pinochle,
+    insuitmarriage,
+    sixtyqueens,
+    eightykings,
+    hundredaces,
+    insuitrun,
+    doublepinochle,
+    fourhundredjacks,
+    sixhundredqueens,
+    eighthundredkings,
+    thousandaces,
+    insuitdoublerun
+
+};
+
+// a class to create/play a game of Pinochle
 class PinochleGame : public Game
 {
 public:
@@ -19,9 +41,19 @@ public:
     virtual int play(); // a single round of Pinochle
     void collectHands();
     void printPlayersCurrentHands();
+    friend std::ostream &operator<<(std::ostream &x, const PinochleMelds &y);
+
+    static constexpr unsigned int values[15] = {10, 20, 40, 40, 40, 60, 80, 100, 150, 300, 400, 600, 800, 1000, 1500};
 
 protected:
     pinochleDeck deck;
     std::vector<CardSet<Suit, pinRank>> hands;
     virtual void deal();
+
+private:
+    void suit_independent_evaluation(const CardSet<Suit, pinRank> &x, std::vector<PinochleMelds> &vec);
 };
+
+void checkAllEightCards(std::vector<Card<Suit, pinRank>>::iterator startOfGivenCard, std::vector<Card<Suit, pinRank>>::iterator onePastEndOfGivenCard);
+
+std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator> getCardRange(const std::vector<Card<Suit, pinRank>> &cards, const pinRank card);

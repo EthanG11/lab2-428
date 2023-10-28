@@ -40,3 +40,12 @@ bool compare_2(const Card<S, R> &card1, const Card<S, R> &card2)
 	}
 	return false;
 }
+template <typename S, typename R>
+bool Card<S, R>::operator==(const Card<S, R> other) const
+{
+	if (this->rank == other.rank && this->suit == other.suit)
+	{
+		return true;
+	}
+	return false;
+}
