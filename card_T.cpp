@@ -1,6 +1,6 @@
 // Sarah Wilkinson,  s.z.wilkinson@wustl.edu
 // Ethan Gray, ethan.gray@wustl.edu
-// This file contains the implementation of the overloaded operator << for the Card template.
+// This file contains the implementation of the overloaded operators << and == for the Card template, as well as member functions compare_1 and compare_2.
 
 #include "card_T.h"
 
