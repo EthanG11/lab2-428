@@ -1,7 +1,7 @@
 // Sarah Wilkinson,  s.z.wilkinson@wustl.edu
 // Ethan Gray, ethan.gray@wustl.edu
 // This file contains the implementations for the member functions of the CardSet_T template class.
-// print(), operator>>(), and is_empty()
+// print(), operator>>(), is_empty(), and access_cards()
 
 #include "CardSet_T.h"
 
@@ -21,7 +21,7 @@ void CardSet<Suit, Rank>::print(std::ostream &o, size_t cardsPerLine)
         if (counter == cardsPerLine)
         {
             o << std::endl;
-            counter = 0;
+            counter = 0; //reset the counter because card limit per line has been reached
         }
     }
 }
@@ -63,8 +63,8 @@ bool CardSet<Suit, Rank>::is_empty()
     return false;
 }
 
+//return a ref to cards vector to allow singular violation of encapsulation
 template <typename Suit, typename Rank>
-
 std::vector<Card<Suit, Rank>> CardSet<Suit, Rank>::*CardSet<Suit, Rank>::access_cards()
 {
     return &CardSet<Suit, Rank>::cards;
