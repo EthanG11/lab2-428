@@ -230,7 +230,7 @@ void PinochleGame::suit_independent_evaluation(const CardSet<Suit, pinRank> &han
     {
 
         // test for doublepinochle
-        if (*(jackTest++) == jackDiamond && *(queenTest++) == queenSpade)
+        if (*(++jackTest) == jackDiamond && *(++queenTest) == queenSpade)
         {
 
             vec.push_back(PinochleMelds::doublepinochle);
