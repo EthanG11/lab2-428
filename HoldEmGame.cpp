@@ -168,9 +168,8 @@ std::ostream &operator<<(std::ostream &stream, const HoldEmHandRank &rank)
     return stream;
 }
 
-HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank> &hand, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker)
+HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank> &hand, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker, pokerRank &fifthTieBreaker)
 {
-    pokerRank xValueReturn = pokerRank::undefined;
     CardSet<Suit, pokerRank> localHand(hand);
 
     std::vector<Card<Suit, pokerRank>> CardSet<Suit, pokerRank>::*memberCards = CardSet<Suit, pokerRank>::access_cards();
@@ -196,7 +195,7 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
 
     // check for straighflush
 
-    if (checkForStraight(cards, firstTieBreaker) && checkForFlush(cards, firstTieBreaker))
+    if (checkForStraight(cards, firstTieBreaker) && checkForFlush(cards))
     {
         return HoldEmHandRank::straightflush;
     }
@@ -216,6 +215,11 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
     // check for flush
     if (checkForFlush(cards))
     {
+        firstTieBreaker = cards.at(0).rank;
+        secondTieBreaker = cards.at(1).rank;
+        thirdTieBreaker = cards.at(2).rank;
+        fourthTieBreaker = cards.at(3).rank;
+        fifthTieBreaker = cards.at(4).rank;
 
         return HoldEmHandRank::flush;
     }
@@ -244,11 +248,50 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
         return HoldEmHandRank::pair;
     }
 
+    firstTieBreaker = cards.at(0).rank;
+    secondTieBreaker = cards.at(1).rank;
+    thirdTieBreaker = cards.at(2).rank;
+    fourthTieBreaker = cards.at(3).rank;
+    fifthTieBreaker = cards.at(4).rank;
+
     return HoldEmHandRank::xhigh;
 }
 
-bool checkForTwoPair(std::vector<Card<Suit, pokerRank>> &cards, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker)
+// only called when findXofaKind's counter is 2
+// check if the type of hand is a three of a kind or two pairs
+bool checkFor3Kind(std::vector<Card<Suit, pokerRank>> &hand)
 {
+    std::vector<Card<Suit, pokerRank>>::iterator pnt1 = hand.begin();
+    std::vector<Card<Suit, pokerRank>>::iterator pnt2 = ++hand.begin();
+
+    int counter = 0;
+    // check first three cards to see their subsequent two cards are the same. If yes, then it is a three of a kind. If not, then it is two pairs.
+    // do not check beyond first three cards because we are looking for groups of three.
+    while (pnt1 != hand.end() - 4)
+    {
+        // check next two cards to see if they are the same as the first card
+        while (pnt2 != pnt1 + 3)
+        {
+            // since hand is sorted, a three kind's card will be right next to each other. Add to counter if pnt2's card is same as pnt1's card.
+            if ((*pnt1).rank == (*pnt2).rank)
+            {
+                counter++;
+                pnt2++;
+            }
+        }
+
+        // if we have found two matches to the first card, then we have found a three of a kind.
+        if (counter == 2)
+        {
+            return true;
+        }
+
+        counter = 0; // reset counter
+        pnt1++;      // adjust pointer to next card
+    }
+
+    // if we have reached here, then no three pair was found, so it must be two pairs
+    return false;
 }
 
 bool checkForFullHouse(std::vector<Card<Suit, pokerRank>> &cards, pokerRank &firstTieBreaker)
@@ -259,7 +302,6 @@ bool checkForFullHouse(std::vector<Card<Suit, pokerRank>> &cards, pokerRank &fir
 
     std::vector<Card<Suit, pokerRank>>::iterator fh = cards.begin();
     pokerRank first = cards.at(0).rank;
-    bool fullHouse = false;
 
     bool case1 = true;
 
@@ -330,6 +372,8 @@ bool checkForStraight(std::vector<Card<Suit, pokerRank>> &hand, pokerRank &first
         next++;
     }
 
+    firstTieBreaker = (*next).rank;
+
     return true;
 }
 bool checkForFlush(std::vector<Card<Suit, pokerRank>> &hand)
@@ -356,15 +400,23 @@ bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &fi
         }
         else
         {
+
             counter++;
         }
+
         pnt2++;
     }
     // 1 for pair
     // 2 for threeofakind
     // 3 for fourofakind
-    if (counter >= (x - 1))
+    if (counter == (x - 1))
     {
+
+        if (counter == 2)
+        {
+            checkFor3Kind(hand);
+        }
+
         return true;
     }
     return false;
@@ -374,33 +426,37 @@ bool operator<(const HoldEmGame::values::hold &x, const HoldEmGame::values::hold
 {
 
     int xFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
-    int xFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
-    int xFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
-    int xFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
+    int xSecondTieBreaker = static_cast<int>(x.tieBreakers.at(1));
+    int xThirdBreaker = static_cast<int>(x.tieBreakers.at(2));
+    int xFourthTieBreaker = static_cast<int>(x.tieBreakers.at(3));
 
-    int yFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
-    int yFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
-    int yFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
-    int yFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
+    int yFirsttTieBreaker = static_cast<int>(y.tieBreakers.at(0));
+    int ySecondTieBreaker = static_cast<int>(y.tieBreakers.at(1));
+    int yThirdTieBreaker = static_cast<int>(y.tieBreakers.at(2));
+    int yFourthTieBreaker = static_cast<int>(y.tieBreakers.at(3));
 
-    if (x.holdEmHandRank < y.holdEmHandRank)
+    if (static_cast<int>(x.holdEmHandRank) < static_cast<int>(y.holdEmHandRank))
     {
         return true;
     }
 
-    if (x.tieBreakers.at(0) < y.tieBreakers.at(0))
+    else if ((x.holdEmHandRank == HoldEmHandRank::flush && y.holdEmHandRank == HoldEmHandRank::flush) || (x.holdEmHandRank == HoldEmHandRank::xhigh && y.holdEmHandRank == HoldEmHandRank::xhigh))
+    {
+    }
+
+    if (xFirstTieBreaker < yFirsttTieBreaker)
     {
         return true;
     }
-    else if (x.tieBreakers.at(1) < y.tieBreakers.at(1))
+    else if (xSecondTieBreaker < ySecondTieBreaker)
     {
         return true;
     }
-    else if (x.tieBreakers.at(2) < y.tieBreakers.at(2))
+    else if (xThirdBreaker < yThirdTieBreaker)
     {
         return true;
     }
-    else if (x.tieBreakers.at(3) < y.tieBreakers.at(3))
+    else if (xFourthTieBreaker < yFourthTieBreaker)
     {
         return true;
     }

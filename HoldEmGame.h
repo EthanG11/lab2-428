@@ -48,6 +48,7 @@ public:
             CardSet<Suit, HoldEmHandRank> cards;
             std::string playerName;
             HoldEmHandRank holdEmHandRank;
+
             std::vector<pokerRank> tieBreakers;
 
             hold(CardSet<Suit, HoldEmHandRank> cards, std::string playerName, HoldEmHandRank holdEmHandRank, std::vector<pokerRank> tieBreakers) : cards(cards), playerName(playerName), holdEmHandRank(holdEmHandRank), tieBreakers(tieBreakers){};
@@ -63,7 +64,7 @@ protected:
     void printBoard(const char *input, int numCards);
 
 private:
-    HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank> &hand, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker);
+    HoldEmHandRank holdem_hand_evaluation(const CardSet<Suit, pokerRank> &hand, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker, pokerRank &fifthTieBreaker);
 };
 
 std::ostream &operator<<(std::ostream &, const HoldEmHandRank &);

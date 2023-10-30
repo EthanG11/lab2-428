@@ -26,6 +26,7 @@ enum class pokerRank
 	king,
 	ace,
 	undefined
+
 };
 
 // print the rank of a poker card
