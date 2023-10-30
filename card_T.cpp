@@ -8,7 +8,7 @@
 template <typename S, typename R>
 std::ostream &operator<<(std::ostream &write, const Card<S, R> &card)
 {
-	write << card.suit << card.rank;
+	write << card.rank << card.suit;
 
 	return write;
 }

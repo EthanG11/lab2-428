@@ -69,11 +69,8 @@ void PinochleGame::collectHands()
         deck.collect(*i);
     }
 }
-
-//override << to allow for printing names of melds
 std::ostream &operator<<(std::ostream &x, const PinochleMelds &y)
 {
-    //GET RID OF THIS LITERAL
     std::string names[15] = {
         "dix",
         "offsuitmarriage",
@@ -115,6 +112,7 @@ void PinochleGame::printPlayersCurrentHands()
         {
             std::cout << "MELD: " << *m << std::endl;
         }
+        melds.clear();
 
         counter++;
         j++;
@@ -134,73 +132,65 @@ std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pin
     return std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator>(it, end.base());
 }
 
-//check hand for melds of size 8 and 4
-//i.e. every meld except for pinochle and doublepinochle
-void checkEightAndFourMelds(std::vector<Card<Suit, pinRank>> &cards, pinRank rank, std::vector<PinochleMelds> &vec)
+void checkAllEightCards(std::vector<Card<Suit, pinRank>> &cards, pinRank card, std::vector<PinochleMelds> &vec)
 {
     // check for 8
     int counter = 0;
 
-    auto iteratorPair = getCardRange(cards, rank);
+    auto iteratorPair = getCardRange(cards, card);
 
     auto it = iteratorPair.first;
     auto end = iteratorPair.second;
 
-    //check if first seven have same rank
-    while ((*(it)).rank == rank && counter < 8)
+    while ((*(it)).rank == card && counter < 8)
     {
         counter++;
         it++;
     }
 
-    //skip checks of type 8 if first seven were not the same
-    //check for thousandaces, eighthundredkings, sixhundredqueens, and fourhundredjacks
-    //determine meld based on final card because all cards prior to this point must have been the same.
     if (counter == 8)
     {
-        if (rank == pinRank::ace)
+        if (card == pinRank::ace)
         {
             vec.push_back(PinochleMelds::thousandaces);
         }
-        else if (rank == pinRank::king)
+        else if (card == pinRank::king)
         {
             vec.push_back(PinochleMelds::eighthundredkings);
         }
-        else if (rank == pinRank::queen)
+        else if (card == pinRank::queen)
         {
             vec.push_back(PinochleMelds::sixhundredqueens);
         }
-        else if (rank == pinRank::jack)
+        else if (card == pinRank::jack)
         {
             vec.push_back(PinochleMelds::fourhundredjacks);
         }
     }
 
-    // skip checks of type 4 if first three were not the same
-    // check for hundredaces, eightykings, sixtyqueens, and fortyjacks
-    // determine meld based on final card because all cards prior to this point must have been the same.
+    // check for 4
     else if (counter >= 4)
     {
         for (; it != end; it++)
         {
-            if (std::find(it, end, Card<Suit, pinRank>(Suit::clubs, rank)) != end &&
-                std::find(it, end, Card<Suit, pinRank>(Suit::diamonds, rank)) != end &&
-                std::find(it, end, Card<Suit, pinRank>(Suit::hearts, rank)) != end &&
-                std::find(it, end, Card<Suit, pinRank>(Suit::spades, rank)) != end)
+            if (std::find(it, end, Card<Suit, pinRank>(Suit::clubs, card)) != end &&
+                std::find(it, end, Card<Suit, pinRank>(Suit::diamonds, card)) != end &&
+                std::find(it, end, Card<Suit, pinRank>(Suit::hearts, card)) != end &&
+                std::find(it, end, Card<Suit, pinRank>(Suit::spades, card)) != end)
             {
-                if (rank == pinRank::ace)
+                if (card == pinRank::ace)
                 {
                     vec.push_back(PinochleMelds::hundredaces);
                 }
-                else if (rank == pinRank::king)
+                else if (card == pinRank::king)
                 {
                     vec.push_back(PinochleMelds::eightykings);
                 }
-                else if (rank == pinRank::queen)
+                else if (card == pinRank::queen)
                 {
                     vec.push_back(PinochleMelds::sixtyqueens);
                 }
-                else if (rank == pinRank::jack)
+                else if (card == pinRank::jack)
                 {
                     vec.push_back(PinochleMelds::fortyjacks);
                 }
@@ -208,7 +198,6 @@ void checkEightAndFourMelds(std::vector<Card<Suit, pinRank>> &cards, pinRank ran
         }
     }
 };
-
 
 void PinochleGame::suit_independent_evaluation(const CardSet<Suit, pinRank> &hand, std::vector<PinochleMelds> &vec)
 {
@@ -219,16 +208,22 @@ void PinochleGame::suit_independent_evaluation(const CardSet<Suit, pinRank> &han
 
     std::vector<Card<Suit, pinRank>> cards = localHand.*memberCards;
 
-    std::sort(cards.begin(), cards.end(), compare_1<Suit, pinRank>);
     std::sort(cards.begin(), cards.end(), compare_2<Suit, pinRank>);
+    std::sort(cards.begin(), cards.end(), compare_1<Suit, pinRank>);
 
-    //check for melds that have 8 cards and 4 cards
-    checkEightAndFourMelds(cards, pinRank::ace, vec);
-    checkEightAndFourMelds(cards, pinRank::king, vec);
-    checkEightAndFourMelds(cards, pinRank::queen, vec);
-    checkEightAndFourMelds(cards, pinRank::jack, vec);
+    std::cout << "Sorted: ";
 
-    //check for pinochle and double pinochle melds
+    for (std::vector<Card<Suit, pinRank>>::iterator it = cards.begin(); it != cards.end(); it++)
+    {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+
+    checkAllEightCards(cards, pinRank::ace, vec);
+    checkAllEightCards(cards, pinRank::king, vec);
+    checkAllEightCards(cards, pinRank::queen, vec);
+    checkAllEightCards(cards, pinRank::jack, vec);
+
     Card<Suit, pinRank> jackDiamond(Suit::diamonds, pinRank::jack);
     Card<Suit, pinRank> queenSpade(Suit::spades, pinRank::queen);
     auto jackTest = std::find_if(
