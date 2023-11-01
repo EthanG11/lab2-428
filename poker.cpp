@@ -66,7 +66,19 @@ std::ostream &operator<<(std::ostream &write, const pokerRank &pRank)
 pokerRank operator++(pokerRank &prank)
 {
 	// if the given rank is undefined, do not change the rank. Otherwise, increment the rank by one and return it.
-	prank = (prank == pokerRank::undefined) ? prank : static_cast<pokerRank>(static_cast<int>(prank) + 1);
+	if (prank == pokerRank::ace)
+	{
+		prank = pokerRank::undefined;
+	}
+	else if (prank == pokerRank::undefined)
+	{
+		prank = prank;
+	}
+	else
+	{
+		prank = static_cast<pokerRank>(static_cast<int>(prank) + 1);
+	}
+
 	return prank;
 }
 

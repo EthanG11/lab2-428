@@ -21,7 +21,7 @@ void CardSet<Suit, Rank>::print(std::ostream &o, size_t cardsPerLine)
         if (counter == cardsPerLine)
         {
             o << std::endl;
-            counter = 0; //reset the counter because card limit per line has been reached
+            counter = 0; // reset the counter because card limit per line has been reached
         }
     }
 }
@@ -40,7 +40,7 @@ CardSet<Suit, Rank> &CardSet<Suit, Rank>::operator>>(CardSet<Suit, Rank> &set)
     }
     catch (...)
     {
-        std::cout << "cards is empty";
+        std::cout << "ERROR CAUGHT: cards is empty";
     }
 
     Card<Suit, Rank> lastCard = Card(this->cards.back().suit, this->cards.back().rank);
@@ -63,7 +63,7 @@ bool CardSet<Suit, Rank>::is_empty()
     return false;
 }
 
-//return a ref to cards vector to allow singular violation of encapsulation
+// return a ref to cards vector to allow singular violation of encapsulation
 template <typename Suit, typename Rank>
 std::vector<Card<Suit, Rank>> CardSet<Suit, Rank>::*CardSet<Suit, Rank>::access_cards()
 {

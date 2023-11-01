@@ -12,6 +12,8 @@
 // ranks of cards that are only found in a poker deck
 enum class pokerRank
 {
+	undefined,
+
 	two,
 	three,
 	four,
@@ -25,7 +27,6 @@ enum class pokerRank
 	queen,
 	king,
 	ace,
-	undefined
 
 };
 

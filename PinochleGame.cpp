@@ -211,14 +211,6 @@ void PinochleGame::suit_independent_evaluation(const CardSet<Suit, pinRank> &han
     std::sort(cards.begin(), cards.end(), compare_2<Suit, pinRank>);
     std::sort(cards.begin(), cards.end(), compare_1<Suit, pinRank>);
 
-    std::cout << "Sorted: ";
-
-    for (std::vector<Card<Suit, pinRank>>::iterator it = cards.begin(); it != cards.end(); it++)
-    {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
-
     checkAllEightCards(cards, pinRank::ace, vec);
     checkAllEightCards(cards, pinRank::king, vec);
     checkAllEightCards(cards, pinRank::queen, vec);

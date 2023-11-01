@@ -45,13 +45,13 @@ public:
     {
         struct hold
         {
-            CardSet<Suit, HoldEmHandRank> cards;
+            CardSet<Suit, pokerRank> cards;
             std::string playerName;
             HoldEmHandRank holdEmHandRank;
 
             std::vector<pokerRank> tieBreakers;
 
-            hold(CardSet<Suit, HoldEmHandRank> cards, std::string playerName, HoldEmHandRank holdEmHandRank, std::vector<pokerRank> tieBreakers) : cards(cards), playerName(playerName), holdEmHandRank(holdEmHandRank), tieBreakers(tieBreakers){};
+            hold(CardSet<Suit, pokerRank> cards, std::string playerName, HoldEmHandRank holdEmHandRank, std::vector<pokerRank> tieBreakers) : cards(cards), playerName(playerName), holdEmHandRank(holdEmHandRank), tieBreakers(tieBreakers){};
         };
     };
 
