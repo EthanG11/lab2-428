@@ -5,26 +5,26 @@ LAB 2
 
 8. We chose to use the default copy constructor as the only member variable is a vector, which has its own copy constructor allowing us to perform a successful deep copy.
 
-Added an == operator to the card class.
+Created a checkAllEightCards function to the PinochleGame files that checks a hand for one of the 8 card melds as well as the corresponding 4 card melds. This made our code more modular and reusable so that we did not have to repeat logic in the suit_independent_evaluation function.
 
-Created a checkAllEightCards function that checks a hand for one of the 8 card combinations as well as the corresponding 4 card combinations.
+Created a findXofaKind function in the HoldemGame files. This also made our code more modular and reusable. The findXofaKind function can be used to find if a 5 card hand has a 2 of a kind i.e a pair a 3 of a kind or a 4 of a kind. It returns true or false based on if it finds X of a kind based on the given integer parameter.
 
-Created a getCardRange function that returns a pair of iterators to the start of a card rank in the sorted vecotr and the end of a card rank in the sorted vector.
+Created a checkForStraight function. This function just returns true or false if it finds a valid straight in an inputted five card hand. This also made our code more modular and reusable as it is used to check for a straight and a straight flush.
 
-Created a findXofaKind function.
+Added a vector<pokerrank> called tieBreakers to the nested struct we created in this lab. This stored 5 potential "tiebreaker" values. A "tiebreaker" is just the poker rank of the values in step 16 listed in order. These "tiebreakers" are then compared in the < operator we created for the nested struct.
 
-Created a checkForStraight function.
+We did this because it is more efficient to store and calculate the tieBreakers values in the call to the holdem_hand_evlaluation function, while we are finding the HoldemHandRank instead of reiterating through the hands for the tiebreakers values in the < operator. So this meant that we had to add 5 additional parameters of pokerRanks references to the holdem_hand_evaluation for the 5 possible tiebreakers.
 
-Added a vector<pokerrank> tieBreakers to the nested struct. We did this because it is more efficient to store the tieBreakers values in the call to the holdem_hand_evlaluatoin function instead of recheking the hands for the tiebreakers values in the < operator. So this meant that we added 4 additional parameters that are referecnes to pokerRanks for the 4 possible tiebreakers. These tie breakers values are stored in the tieBreakers vector<pokerRank>, so that they can be used in the < operator that we created.
+Moved the undefined value in pokerRank to the lowest value in the enum so that the < operator for HoldEmHand Ranks would work as expected. Also had to adjust the ++ operator for pokerRank so that it would work the same with the new order change.
 
-Moved the undefined value in pokerRank to the lowest value so that the < operator for HoldEmHand Ranks would work as expected. Also had to adjust the ++ operator for poker so that it would work with this change.
+Created a test pinochle program called TestPinochle.cpp to test if could properly identify 8 card and 4 card melds that arent double pinochle or pinochle. It worked as expected.
+
+ERRORS:
+
+1. undefined reference to access_cards(). This was a linker error that was caused becuase our definition of the function did not exactly match the declaration.
 
 //TODO
-
-test pinochle evaluation function
-test poker
-
-runs:
+RUNS:
 
 1. test pinochle finding a pinochle
 
@@ -71,7 +71,45 @@ d: A S 9 D Q D J H J D K D J S 10 S 10 D 9 D A C J C
 
 would you like to end the game? yes or no:
 
-4. test other melds
+4. test other melds. Output of TestPinochle.cpp:
+
+ethan@ethan-XPS-15-7590:~/cse428/Lab2$ ./lab2
+success hundredaces
+success thousandaces
+
+5. finding fortyjacls and pinocle in same hand
+
+would you like to end the game? yes or no:
+n
+a: K C 9 H 9 D 9 C 9 D Q H 10 D 9 S A S K D 10 S K H
+
+b: J S A H J D K S 10 D 10 C K H A H A S 9 C Q H A D
+
+c: J C Q S A C K C 9 H Q D 10 S A D J S J H Q D J D
+
+MELD: name: fortyjacks points: 40
+
+MELD: name: pinochle points: 40
+
+d: A C 10 H K D K S 9 S Q C Q S J H 10 H 10 C Q C J C
+
+would you like to end the game? yes or no:
+
+6. find eightykings
+
+would you like to end the game? yes or no:
+n
+a: K S J C K D Q H K C 9 D A H J D J S 10 C 10 H K H
+
+MELD: name: eightykings points: 80
+
+b: Q C Q D 9 C A C 10 C Q H J D 9 S 9 H 10 H 10 D A S
+
+c: A S Q C 9 C 9 H J H J H Q D J S K H A C 9 S 9 D
+
+d: Q S A D 10 D Q S J C K D 10 S K S A H K C A D 10 S
+
+would you like to end the game? yes or no:
 
 Poker tests:
 

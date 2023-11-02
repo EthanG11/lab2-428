@@ -11,7 +11,7 @@
 #include <iostream>
 #include <list>
 
-//possible melds, or specific combinations of cards, in pinochle.
+// possible melds, or specific combinations of cards, in pinochle.
 enum class PinochleMelds
 {
     dix,
@@ -30,6 +30,7 @@ enum class PinochleMelds
     thousandaces,
     insuitdoublerun
 };
+int const NUMBER_OF_MELDS = 15;
 
 // a class to create/play a game of Pinochle
 class PinochleGame : public Game
@@ -41,7 +42,7 @@ public:
     void printPlayersCurrentHands();
     friend std::ostream &operator<<(std::ostream &x, const PinochleMelds &y);
 
-    static constexpr unsigned int values[15] = {10, 20, 40, 40, 40, 60, 80, 100, 150, 300, 400, 600, 800, 1000, 1500}; //GET RID OF NUMBER 15 AS LITERAL
+    static constexpr unsigned int values[NUMBER_OF_MELDS] = {10, 20, 40, 40, 40, 60, 80, 100, 150, 300, 400, 600, 800, 1000, 1500};
 
 protected:
     pinochleDeck deck;
@@ -52,7 +53,5 @@ private:
     void suit_independent_evaluation(const CardSet<Suit, pinRank> &x, std::vector<PinochleMelds> &vec);
 };
 
-//check hand for melds
+// check hand for melds
 void checkEightAndFourMelds(std::vector<Card<Suit, pinRank>> &cards, pinRank card, std::vector<PinochleMelds> &vec);
-
-std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator> const getCardRange(std::vector<Card<Suit, pinRank>> &cards, pinRank card);

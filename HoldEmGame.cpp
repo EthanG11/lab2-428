@@ -74,8 +74,8 @@ void HoldEmGame::deal()
 int HoldEmGame::play()
 {
     int NUM_FLOP_CARDS = 3;
-    // int NUM_TURN_CARDS = 4;
-    // int NUM_RIVER_CARDS = 5;
+    int NUM_TURN_CARDS = 4;
+    int NUM_RIVER_CARDS = 5;
 
     bool end_game_flag = false;
     while (!end_game_flag)
@@ -129,8 +129,6 @@ int HoldEmGame::play()
             vec.push_back(x);
         }
 
-        // vec.at(0) < vec.at(1);
-
         std::sort(vec.begin(), vec.end());
 
         for (auto it = vec.begin(); it != vec.end(); it++)
@@ -140,12 +138,11 @@ int HoldEmGame::play()
             (*it).cards.print(std::cout, 5);
             std::cout << " Hand rank: " << (*it).holdEmHandRank << std::endl;
         }
-        /*
-            deal();
-            printBoard("turn", NUM_TURN_CARDS);
-            deal();
-            printBoard("river", NUM_RIVER_CARDS);
-        */
+
+        deal();
+        printBoard("turn", NUM_TURN_CARDS);
+        deal();
+        printBoard("river", NUM_RIVER_CARDS);
 
         for (int i = 0; i < static_cast<int>(players.size()); i++)
         {
@@ -226,6 +223,7 @@ std::ostream &operator<<(std::ostream &stream, const HoldEmHandRank &rank)
 
 HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank> &hand, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker, pokerRank &fifthTieBreaker)
 {
+    int const HAND_SIZE = 5;
     CardSet<Suit, pokerRank> localHand(hand);
 
     std::vector<Card<Suit, pokerRank>> CardSet<Suit, pokerRank>::*memberCards = CardSet<Suit, pokerRank>::access_cards();
@@ -236,7 +234,7 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
     std::sort(cards.begin(), cards.end(), compare_1<Suit, pokerRank>);
 
     // check for undefined
-    if (cards.size() != 5)
+    if (cards.size() != HAND_SIZE)
     {
         return HoldEmHandRank::undefined;
     }
@@ -440,10 +438,14 @@ bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &fi
     // 1 for pair
     // 2 for threeofakind
     // 3 for fourofakind
+
+    int const PAIR_VALUE = 1;
+    int const THREE_OF_A_KIND_VALUE = 2;
+    int const FOUR_OF_A_KIND_VALUE = 3;
     if (counter == (x - 1))
     {
         // have a pair
-        if (counter == 1)
+        if (counter == PAIR_VALUE)
         {
 
             pokerRank pairValue;
@@ -483,7 +485,7 @@ bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &fi
             fourthTieBreaker = tieBreakValues.at(2);
         }
 
-        if (counter == 2)
+        if (counter == THREE_OF_A_KIND_VALUE)
         {
 
             pokerRank threeOfAKindRank = hand.at(2).rank;
@@ -491,7 +493,7 @@ bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &fi
             firstTieBreaker = threeOfAKindRank;
         }
 
-        if (counter == 3)
+        if (counter == FOUR_OF_A_KIND_VALUE)
         {
             firstTieBreaker = hand.at(3).rank;
         }

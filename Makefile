@@ -4,7 +4,7 @@ EXECUTABLE	= lab2
 #		Source (.cpp) files you want to compile
 #		(NOTE: Don't include header (.h) files, or any source (.cpp) files
 #		that only contain template class method definitions.)
-CMPL_SRCS	=  pinochle.cpp poker.cpp suits.cpp Game.cpp PinochleGame.cpp HoldEmGame.cpp lab2.cpp 
+CMPL_SRCS	=  pinochle.cpp poker.cpp suits.cpp Game.cpp PinochleGame.cpp HoldEmGame.cpp lab2.cpp
 
 #               Source files containing only template class method definitions
 TMPL_SRCS	=   card_T.cpp Deck_T.cpp CardSet_T.cpp 

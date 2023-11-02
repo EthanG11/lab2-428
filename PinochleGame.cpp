@@ -69,9 +69,10 @@ void PinochleGame::collectHands()
         deck.collect(*i);
     }
 }
+
 std::ostream &operator<<(std::ostream &x, const PinochleMelds &y)
 {
-    std::string names[15] = {
+    std::string names[NUMBER_OF_MELDS] = {
         "dix",
         "offsuitmarriage",
         "fortyjacks",
@@ -107,48 +108,45 @@ void PinochleGame::printPlayersCurrentHands()
         std::vector<PinochleMelds> melds;
 
         suit_independent_evaluation(*j, melds);
-        auto m = melds.begin();
-        for (; m != melds.end(); m++)
+
+        if (melds.size() > 0)
         {
-            std::cout << "MELD: " << *m << std::endl;
+            auto m = melds.begin();
+            for (; m != melds.end(); m++)
+            {
+                std::cout << "MELD: " << *m << std::endl;
+            }
+            melds.clear();
         }
-        melds.clear();
 
         counter++;
         j++;
     }
 }
 
-std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator> const getCardRange(std::vector<Card<Suit, pinRank>> &cards, pinRank card)
-{
-    std::vector<Card<Suit, pinRank>>::iterator it = std::find_if(
-        cards.begin(), cards.end(), [&card](Card<Suit, pinRank> current)
-        { return current.rank == card; });
-
-    std::vector<Card<Suit, pinRank>>::reverse_iterator end = std::find_if(cards.rbegin(), cards.rend(), [&card](Card<Suit, pinRank> current)
-                                                                          { return current.rank == card; });
-    end = end++;
-
-    return std::pair<std::vector<Card<Suit, pinRank>>::iterator, std::vector<Card<Suit, pinRank>>::iterator>(it, end.base());
-}
-
-void checkAllEightCards(std::vector<Card<Suit, pinRank>> &cards, pinRank card, std::vector<PinochleMelds> &vec)
+void checkEightAndFourMelds(std::vector<Card<Suit, pinRank>> &cards, pinRank card, std::vector<PinochleMelds> &vec)
 {
     // check for 8
     int counter = 0;
+    int const EIGHT_CARDS = 8;
 
-    auto iteratorPair = getCardRange(cards, card);
+    auto it = cards.begin();
+    auto end = cards.end();
 
-    auto it = iteratorPair.first;
-    auto end = iteratorPair.second;
+    // need to find first occurence of card and THEN start counting from there
 
-    while ((*(it)).rank == card && counter < 8)
+    while (it != end && (*it).rank != card)
+    {
+        it++;
+    }
+
+    while (it != end && (*(it)).rank == card && counter < EIGHT_CARDS)
     {
         counter++;
         it++;
     }
 
-    if (counter == 8)
+    if (counter == EIGHT_CARDS)
     {
         if (card == pinRank::ace)
         {
@@ -167,33 +165,30 @@ void checkAllEightCards(std::vector<Card<Suit, pinRank>> &cards, pinRank card, s
             vec.push_back(PinochleMelds::fourhundredjacks);
         }
     }
-
-    // check for 4
-    else if (counter >= 4)
+    else
     {
-        for (; it != end; it++)
+        it = cards.begin();
+
+        if (std::find(it, end, Card<Suit, pinRank>(Suit::clubs, card)) != end &&
+            std::find(it, end, Card<Suit, pinRank>(Suit::diamonds, card)) != end &&
+            std::find(it, end, Card<Suit, pinRank>(Suit::hearts, card)) != end &&
+            std::find(it, end, Card<Suit, pinRank>(Suit::spades, card)) != end)
         {
-            if (std::find(it, end, Card<Suit, pinRank>(Suit::clubs, card)) != end &&
-                std::find(it, end, Card<Suit, pinRank>(Suit::diamonds, card)) != end &&
-                std::find(it, end, Card<Suit, pinRank>(Suit::hearts, card)) != end &&
-                std::find(it, end, Card<Suit, pinRank>(Suit::spades, card)) != end)
+            if (card == pinRank::ace)
             {
-                if (card == pinRank::ace)
-                {
-                    vec.push_back(PinochleMelds::hundredaces);
-                }
-                else if (card == pinRank::king)
-                {
-                    vec.push_back(PinochleMelds::eightykings);
-                }
-                else if (card == pinRank::queen)
-                {
-                    vec.push_back(PinochleMelds::sixtyqueens);
-                }
-                else if (card == pinRank::jack)
-                {
-                    vec.push_back(PinochleMelds::fortyjacks);
-                }
+                vec.push_back(PinochleMelds::hundredaces);
+            }
+            else if (card == pinRank::king)
+            {
+                vec.push_back(PinochleMelds::eightykings);
+            }
+            else if (card == pinRank::queen)
+            {
+                vec.push_back(PinochleMelds::sixtyqueens);
+            }
+            else if (card == pinRank::jack)
+            {
+                vec.push_back(PinochleMelds::fortyjacks);
             }
         }
     }
@@ -211,13 +206,14 @@ void PinochleGame::suit_independent_evaluation(const CardSet<Suit, pinRank> &han
     std::sort(cards.begin(), cards.end(), compare_2<Suit, pinRank>);
     std::sort(cards.begin(), cards.end(), compare_1<Suit, pinRank>);
 
-    checkAllEightCards(cards, pinRank::ace, vec);
-    checkAllEightCards(cards, pinRank::king, vec);
-    checkAllEightCards(cards, pinRank::queen, vec);
-    checkAllEightCards(cards, pinRank::jack, vec);
+    checkEightAndFourMelds(cards, pinRank::ace, vec);
+    checkEightAndFourMelds(cards, pinRank::king, vec);
+    checkEightAndFourMelds(cards, pinRank::queen, vec);
+    checkEightAndFourMelds(cards, pinRank::jack, vec);
 
     Card<Suit, pinRank> jackDiamond(Suit::diamonds, pinRank::jack);
     Card<Suit, pinRank> queenSpade(Suit::spades, pinRank::queen);
+
     auto jackTest = std::find_if(
         cards.begin(), cards.end(), [jackDiamond, queenSpade](Card<Suit, pinRank> current)
         { return current == jackDiamond; });
