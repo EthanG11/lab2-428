@@ -14,8 +14,7 @@ public:
     Game(int argc, const char *argv[]);
     virtual int play() = 0;
     bool promptEndGame();
-    int SUCCESS = 0;
-
+    int SUCCESS = 0; //descriptive var to indicate successful run of game
 protected:
     std::vector<std::string> players;
 };

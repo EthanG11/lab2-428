@@ -17,6 +17,6 @@ public:
        void collect(CardSet<Suit, Rank> &set); // shift all of the cards out of the CardSet and into the Deck
 };
 
-#ifdef TEMPLATE_HEADERS_INCLUDE_SOURCE /* test whether guard symbol is defined */
+#ifdef TEMPLATE_HEADERS_INCLUDE_SOURCE
 #include "Deck_T.cpp"
 #endif

@@ -1,6 +1,6 @@
 // Sarah Wilkinson,  s.z.wilkinson@wustl.edu
 // Ethan Gray, ethan.gray@wustl.edu
-// This file contains the implementations for the PinochleGame class's member functions.
+// This file contains the implementations for the PinochleGame class's member functions, as well as functions necessary for checking win states of a pinochle game.
 
 #include "PinochleGame.h"
 
@@ -20,13 +20,13 @@ PinochleGame::PinochleGame(int argc, const char *argv[]) : Game(argc, argv)
 // until all cards in the deck have been distributed
 void PinochleGame::deal()
 {
-
+    int const NUM_CARDS_TO_DEAL = 3;
     int current_player_num = 0;
 
     while (!deck.is_empty())
     {
         // deals 3 cards into current players hand and removes the 3 cards from the deck
-        for (int j = 0; j < 3; j++)
+        for (int j = 0; j < NUM_CARDS_TO_DEAL; j++)
         {
             deck >> hands.at(current_player_num);
         }
@@ -70,6 +70,7 @@ void PinochleGame::collectHands()
     }
 }
 
+//print the appropriate string for the type of meld
 std::ostream &operator<<(std::ostream &x, const PinochleMelds &y)
 {
     std::string names[NUMBER_OF_MELDS] = {
@@ -124,6 +125,7 @@ void PinochleGame::printPlayersCurrentHands()
     }
 }
 
+//check for meld types of eight and meld types of four
 void checkEightAndFourMelds(std::vector<Card<Suit, pinRank>> &cards, pinRank card, std::vector<PinochleMelds> &vec)
 {
     // check for 8
@@ -194,6 +196,7 @@ void checkEightAndFourMelds(std::vector<Card<Suit, pinRank>> &cards, pinRank car
     }
 };
 
+//initiate checks for melds in a game of pinochle. call the appropriate testing function to check for melds of type 8 and 4, and then perform manual checking for other meld types.
 void PinochleGame::suit_independent_evaluation(const CardSet<Suit, pinRank> &hand, std::vector<PinochleMelds> &vec)
 {
 

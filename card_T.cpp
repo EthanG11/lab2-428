@@ -13,6 +13,9 @@ std::ostream &operator<<(std::ostream &write, const Card<S, R> &card)
 	return write;
 }
 
+// compare the ranks of two cards
+// if the first rank is less than the second rank, then return true.
+// if the cards have the same rank, then check suit. 
 template <typename S, typename R>
 bool compare_1(const Card<S, R> &card1, const Card<S, R> &card2)
 {
@@ -27,6 +30,9 @@ bool compare_1(const Card<S, R> &card1, const Card<S, R> &card2)
 	return false;
 }
 
+// compare the suits of two cards
+// if the first suit is less than the second suit, return true.
+// if the suits are the same, then check rank.
 template <typename S, typename R>
 bool compare_2(const Card<S, R> &card1, const Card<S, R> &card2)
 {
@@ -40,6 +46,9 @@ bool compare_2(const Card<S, R> &card1, const Card<S, R> &card2)
 	}
 	return false;
 }
+
+// check if two cards are the same card
+// return true if they match in both suit and rank
 template <typename S, typename R>
 bool Card<S, R>::operator==(const Card<S, R> other) const
 {

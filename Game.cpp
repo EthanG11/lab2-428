@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include <string>
+
 // add as many players as the number of players given to the game
 Game::Game(int argc, const char *argv[])
 {
@@ -15,7 +16,7 @@ Game::Game(int argc, const char *argv[])
 }
 
 // ask the user if they would like to play another round of their game or to end the game.
-//check if they say yes or no.
+// check if they say yes or no.
 bool Game::promptEndGame()
 {
     std::string response;

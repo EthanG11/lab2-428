@@ -2,6 +2,7 @@
 // Ethan Gray, ethan.gray@wustl.edu
 // This file contains the PinochleGame class, which inherits the Game class.
 // This class has its own specific deck.
+// This file also contains the functions necessary for checking win states of a pinochle game.
 
 #pragma once
 #include "pinochle.h"

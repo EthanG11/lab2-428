@@ -1,6 +1,7 @@
 // Sarah Wilkinson,  s.z.wilkinson@wustl.edu
 // Ethan Gray, ethan.gray@wustl.edu
-// This file contains the CardSet template class declaration. This class is inherited by the Deck template class.
+// This file contains the CardSet template class declaration, which contains vital member functions for checking if the CardSet has cards and how to access them. 
+// This class is inherited by the Deck template class.
 
 #pragma once
 #include "card_T.h"

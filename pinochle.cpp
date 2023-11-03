@@ -53,12 +53,12 @@ pinRank operator++(pinRank &prank)
 // initialize a pinochle deck by adding two cards of each rank from each suit
 pinochleDeck::pinochleDeck()
 {
-
+	int const NUM_PIN_ITERATIONS = 2;
 	// this process occurs twice:
 	// while the card suit and rank is not undefined,
 	// add the card and then increment the card's rank.
 	// When all pinochle ranks of a single suit have been added, proceed to the next suit and repeat.
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < NUM_PIN_ITERATIONS; i++)
 	{
 		Card<Suit, pinRank> card(Suit::clubs, pinRank::nine);
 

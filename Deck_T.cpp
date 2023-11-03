@@ -9,16 +9,17 @@
 template <typename Suit, typename Rank>
 void Deck<Suit, Rank>::shuffle()
 {
-    std::random_device randomDevice;
-    std::mt19937 randomGen(randomDevice());
+  std::random_device randomDevice;
+  std::mt19937 randomGen(randomDevice());
 
-    std::shuffle(CardSet<Suit, Rank>::cards.begin(), CardSet<Suit, Rank>::cards.end(), randomGen);
+  std::shuffle(CardSet<Suit, Rank>::cards.begin(), CardSet<Suit, Rank>::cards.end(), randomGen);
 }
 
 //shift all of the cards out of the CardSet and into the Deck
 template <typename Suit, typename Rank>
-void Deck<Suit, Rank>::collect(CardSet<Suit, Rank> &set){
-    while(!set.is_empty()){
-      set >> *this;
-    }
+void Deck<Suit, Rank>::collect(CardSet<Suit, Rank> &set)
+{
+  while(!set.is_empty()){
+    set >> *this;
+  }
 }

@@ -2,6 +2,7 @@
 // Ethan Gray, ethan.gray@wustl.edu
 // This file contains the HoldEmGame class, which inherits the Game class, and the states of this type of poker game.
 // This class has its own specific deck, and notably, state of the game, and board.
+// This file also contains declarations for functions that are necessary to check for win states of a poker game.
 
 #pragma once
 #include "poker.h"
@@ -18,6 +19,7 @@ enum class HoldEmState
     undefined
 };
 
+//possible hands that a player may have in a game of poker
 enum class HoldEmHandRank
 {
     xhigh,
@@ -35,7 +37,6 @@ enum class HoldEmHandRank
 // class to create/play a game of Texas Hold Em.
 class HoldEmGame : public Game
 {
-
 public:
     HoldEmGame(int argc, const char *argv[]);
     virtual int play(); // a single round of Texas Hold Em
@@ -54,7 +55,6 @@ public:
             hold(CardSet<Suit, pokerRank> cards, std::string playerName, HoldEmHandRank holdEmHandRank, std::vector<pokerRank> tieBreakers) : cards(cards), playerName(playerName), holdEmHandRank(holdEmHandRank), tieBreakers(tieBreakers){};
         };
     };
-
 protected:
     HoldEmState state;
     pokerDeck deck;
@@ -67,9 +67,10 @@ private:
     HoldEmHandRank holdem_hand_evaluation(const CardSet<Suit, pokerRank> &hand, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker, pokerRank &fifthTieBreaker);
 };
 
-std::ostream &operator<<(std::ostream &, const HoldEmHandRank &);
-bool operator<(const HoldEmGame::values::hold &x, const HoldEmGame::values::hold &y);
+std::ostream &operator<<(std::ostream &, const HoldEmHandRank &); //print hand rank string
+bool operator<(const HoldEmGame::values::hold &x, const HoldEmGame::values::hold &y); //check tiebreakers
 
+//function to check for hand rank
 bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker);
 bool checkForStraight(std::vector<Card<Suit, pokerRank>> &hand, pokerRank &firstTieBreaker);
 bool checkForFlush(std::vector<Card<Suit, pokerRank>> &hand);

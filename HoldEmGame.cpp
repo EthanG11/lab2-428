@@ -1,8 +1,15 @@
 // Sarah Wilkinson,  s.z.wilkinson@wustl.edu
 // Ethan Gray, ethan.gray@wustl.edu
-// This file contains the implementations of the HoldEmGame class's member functions.
+// This file contains the implementations of the HoldEmGame class's member functions, as well as functions to check for win states in HoldEm Game.
 
 #include "HoldEmGame.h"
+
+//descriptive int const values to indicate positions to grab cards from hand
+int const FIRST_POS = 0;
+int const SECOND_POS = 1;
+int const THIRD_POS = 2;
+int const FOURTH_POS = 3;
+int const FIFTH_POS = 4;
 
 // create a hand for each player in the game
 HoldEmGame::HoldEmGame(int argc, const char *argv[]) : Game(argc, argv), state(HoldEmState::preflop)
@@ -73,6 +80,7 @@ void HoldEmGame::deal()
 // 13/14. ask to play another round and await input
 int HoldEmGame::play()
 {
+    //descriptive int vars to indicate num of cards game is working with at a given point in the game
     int NUM_FLOP_CARDS = 3;
     int NUM_TURN_CARDS = 4;
     int NUM_RIVER_CARDS = 5;
@@ -104,7 +112,7 @@ int HoldEmGame::play()
             localHand >> hand;
             localHand >> hand;
 
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < NUM_FLOP_CARDS; j++)
             {
                 localHand2 >> hand;
             }
@@ -135,7 +143,7 @@ int HoldEmGame::play()
         {
             std::cout << "Player name: " << (*it).playerName << std::endl
                       << " cards: ";
-            (*it).cards.print(std::cout, 5);
+            (*it).cards.print(std::cout, NUM_RIVER_CARDS);
             std::cout << " Hand rank: " << (*it).holdEmHandRank << std::endl;
         }
 
@@ -166,6 +174,7 @@ void HoldEmGame::printPlayersCurrentHands()
 {
     int counter = 0;
     int cards_in_hand = 2;
+
     std::vector<CardSet<Suit, pokerRank>>::iterator j = hands.begin();
     for (std::vector<std::string>::iterator i = players.begin(); i != players.end(); i++)
     {
@@ -177,6 +186,7 @@ void HoldEmGame::printPlayersCurrentHands()
     }
 }
 
+// output appropriate string to describe hand rank
 std::ostream &operator<<(std::ostream &stream, const HoldEmHandRank &rank)
 {
 
@@ -221,9 +231,13 @@ std::ostream &operator<<(std::ostream &stream, const HoldEmHandRank &rank)
     return stream;
 }
 
+// initiate checks for all hand rank types. call appropriate function to check and return corresponding hand rank enum.
 HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank> &hand, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker, pokerRank &fifthTieBreaker)
 {
     int const HAND_SIZE = 5;
+    int const NUM_CARDS_PAIR = 2;
+    int const NUM_CARDS_THREE = 3;
+    int const NUM_CARDS_FOUR = 4;
     CardSet<Suit, pokerRank> localHand(hand);
 
     std::vector<Card<Suit, pokerRank>> CardSet<Suit, pokerRank>::*memberCards = CardSet<Suit, pokerRank>::access_cards();
@@ -247,7 +261,7 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
     }
 
     // check for four of a kind
-    if (findXofaKind(cards, 4, firstTieBreaker, secondTieBreaker, thirdTieBreaker, fourthTieBreaker))
+    if (findXofaKind(cards, NUM_CARDS_FOUR, firstTieBreaker, secondTieBreaker, thirdTieBreaker, fourthTieBreaker))
     {
         return HoldEmHandRank::fourofakind;
     }
@@ -261,11 +275,11 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
     // check for flush
     if (checkForFlush(cards))
     {
-        firstTieBreaker = cards.at(4).rank;
-        secondTieBreaker = cards.at(3).rank;
-        thirdTieBreaker = cards.at(2).rank;
-        fourthTieBreaker = cards.at(1).rank;
-        fifthTieBreaker = cards.at(0).rank;
+        firstTieBreaker = cards.at(FIFTH_POS).rank;
+        secondTieBreaker = cards.at(FOURTH_POS).rank;
+        thirdTieBreaker = cards.at(THIRD_POS).rank;
+        fourthTieBreaker = cards.at(SECOND_POS).rank;
+        fifthTieBreaker = cards.at(FIRST_POS).rank;
 
         return HoldEmHandRank::flush;
     }
@@ -277,33 +291,33 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
     }
 
     // check for threeofakind
-    if (findXofaKind(cards, 3, firstTieBreaker, secondTieBreaker, thirdTieBreaker, fourthTieBreaker))
+    if (findXofaKind(cards, NUM_CARDS_THREE, firstTieBreaker, secondTieBreaker, thirdTieBreaker, fourthTieBreaker))
     {
         return HoldEmHandRank::threeofakind;
     }
     // check for two pair
 
-    if (((cards.at(0).rank == cards.at(1).rank) && (cards.at(2).rank == cards.at(3).rank)) || ((cards.at(0).rank == cards.at(1).rank) && (cards.at(3).rank == cards.at(4).rank)) || ((cards.at(1).rank == cards.at(2).rank) && (cards.at(3).rank == cards.at(4).rank)))
+    if (((cards.at(FIRST_POS).rank == cards.at(SECOND_POS).rank) && (cards.at(THIRD_POS).rank == cards.at(FOURTH_POS).rank)) || ((cards.at(FIRST_POS).rank == cards.at(SECOND_POS).rank) && (cards.at(FOURTH_POS).rank == cards.at(FIFTH_POS).rank)) || ((cards.at(SECOND_POS).rank == cards.at(THIRD_POS).rank) && (cards.at(FOURTH_POS).rank == cards.at(FIFTH_POS).rank)))
     {
 
-        pokerRank highPair = cards.at(3).rank;
+        pokerRank highPair = cards.at(FOURTH_POS).rank;
 
-        pokerRank lowPair = cards.at(1).rank;
+        pokerRank lowPair = cards.at(SECOND_POS).rank;
         pokerRank nonPair;
 
-        if (cards.at(4).rank != cards.at(3).rank)
+        if (cards.at(FIFTH_POS).rank != cards.at(FOURTH_POS).rank)
         {
-            nonPair = cards.at(4).rank;
+            nonPair = cards.at(FIFTH_POS).rank;
         }
         else
         {
-            if (cards.at(1).rank == cards.at(2).rank)
+            if (cards.at(SECOND_POS).rank == cards.at(THIRD_POS).rank)
             {
-                nonPair = cards.at(0).rank;
+                nonPair = cards.at(FIRST_POS).rank;
             }
             else
             {
-                nonPair = cards.at(2).rank;
+                nonPair = cards.at(THIRD_POS).rank;
             }
         }
 
@@ -315,16 +329,16 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
     }
 
     // check for pair
-    if (findXofaKind(cards, 2, firstTieBreaker, secondTieBreaker, thirdTieBreaker, fourthTieBreaker))
+    if (findXofaKind(cards, NUM_CARDS_PAIR, firstTieBreaker, secondTieBreaker, thirdTieBreaker, fourthTieBreaker))
     {
         return HoldEmHandRank::pair;
     }
 
-    firstTieBreaker = cards.at(4).rank;
-    secondTieBreaker = cards.at(3).rank;
-    thirdTieBreaker = cards.at(2).rank;
-    fourthTieBreaker = cards.at(1).rank;
-    fifthTieBreaker = cards.at(0).rank;
+    firstTieBreaker = cards.at(FIFTH_POS).rank;
+    secondTieBreaker = cards.at(FOURTH_POS).rank;
+    thirdTieBreaker = cards.at(THIRD_POS).rank;
+    fourthTieBreaker = cards.at(SECOND_POS).rank;
+    fifthTieBreaker = cards.at(FIRST_POS).rank;
 
     return HoldEmHandRank::xhigh;
 }
@@ -334,19 +348,19 @@ HoldEmHandRank HoldEmGame::holdem_hand_evaluation(const CardSet<Suit, pokerRank>
 bool checkFor3Kind(std::vector<Card<Suit, pokerRank>> &hand)
 {
     // case 1
-    if (hand.at(0).rank == hand.at(1).rank && hand.at(2).rank == hand.at(1).rank)
+    if (hand.at(FIRST_POS).rank == hand.at(SECOND_POS).rank && hand.at(THIRD_POS).rank == hand.at(SECOND_POS).rank)
     {
         return true;
     }
 
     // case 2
 
-    if (hand.at(1).rank == hand.at(2).rank && hand.at(2).rank == hand.at(3).rank)
+    if (hand.at(SECOND_POS).rank == hand.at(THIRD_POS).rank && hand.at(THIRD_POS).rank == hand.at(FOURTH_POS).rank)
     {
         return true;
     }
     // case 3
-    if (hand.at(2).rank == hand.at(3).rank && hand.at(4).rank == hand.at(4).rank)
+    if (hand.at(THIRD_POS).rank == hand.at(FOURTH_POS).rank && hand.at(FIFTH_POS).rank == hand.at(FIFTH_POS).rank)
     {
         return true;
     }
@@ -354,22 +368,22 @@ bool checkFor3Kind(std::vector<Card<Suit, pokerRank>> &hand)
     return false;
 }
 
+//return true if hand contains hand rank type full house
 bool checkForFullHouse(std::vector<Card<Suit, pokerRank>> &cards, pokerRank &firstTieBreaker)
 {
-
     // two cases: first three same and last two same
     // or first two same and last three same
 
-    if ((cards.at(0).rank == cards.at(1).rank) && (cards.at(1).rank == cards.at(2).rank) && (cards.at(3).rank == cards.at(4).rank))
+    if ((cards.at(FIRST_POS).rank == cards.at(SECOND_POS).rank) && (cards.at(SECOND_POS).rank == cards.at(THIRD_POS).rank) && (cards.at(FOURTH_POS).rank == cards.at(FIFTH_POS).rank))
     {
-        firstTieBreaker = cards.at(0).rank;
+        firstTieBreaker = cards.at(FIRST_POS).rank;
 
         return true;
     }
 
-    if ((cards.at(2).rank == cards.at(3).rank) && (cards.at(3).rank == cards.at(4).rank) && (cards.at(0).rank == cards.at(1).rank))
+    if ((cards.at(THIRD_POS).rank == cards.at(FOURTH_POS).rank) && (cards.at(FOURTH_POS).rank == cards.at(FIFTH_POS).rank) && (cards.at(FIRST_POS).rank == cards.at(SECOND_POS).rank))
     {
-        firstTieBreaker = cards.at(4).rank;
+        firstTieBreaker = cards.at(FIFTH_POS).rank;
 
         return true;
     }
@@ -377,10 +391,11 @@ bool checkForFullHouse(std::vector<Card<Suit, pokerRank>> &cards, pokerRank &fir
     return false;
 }
 
+//return true if hand contains hand rank type straight
 bool checkForStraight(std::vector<Card<Suit, pokerRank>> &hand, pokerRank &firstTieBreaker)
 {
 
-    pokerRank starting = hand.at(0).rank;
+    pokerRank starting = hand.at(FIRST_POS).rank;
 
     if (starting >= pokerRank::jack)
     {
@@ -402,13 +417,20 @@ bool checkForStraight(std::vector<Card<Suit, pokerRank>> &hand, pokerRank &first
 
     return true;
 }
+
+//check if hand contains hand rank type flush
 bool checkForFlush(std::vector<Card<Suit, pokerRank>> &hand)
 {
-    Suit first = hand.at(0).suit;
+    //descriptive int const to indicate position from which to grab first card
+    int const FIRST_CARD_POS = 0;
+
+    Suit first = hand.at(FIRST_CARD_POS).suit;
 
     return (std::count_if(hand.begin() + 1, hand.end(), [&first](Card<Suit, pokerRank> card)
                           { return card.suit == first; }) == 4);
 }
+
+//check for pair, three of kind, and four of kind.
 bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &firstTieBreaker, pokerRank &secondTieBreaker, pokerRank &thirdTieBreaker, pokerRank &fourthTieBreaker)
 {
 
@@ -447,6 +469,10 @@ bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &fi
         // have a pair
         if (counter == PAIR_VALUE)
         {
+            //descriptive int const vals to indicate what positions to always grab the highest value card for tiebreaker testing
+            int const CONST_HIGH_POS_TWO_1 = 0;
+            int const CONST_HIGH_POS_TWO_2 = 1;
+            int const CONST_HIGH_POS_TWO_3 = 2;
 
             pokerRank pairValue;
             std::vector<Card<Suit, pokerRank>>::iterator it = hand.begin();
@@ -480,22 +506,27 @@ bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &fi
                 }
             }
             firstTieBreaker = pairValue;
-            secondTieBreaker = tieBreakValues.at(0);
-            thirdTieBreaker = tieBreakValues.at(1);
-            fourthTieBreaker = tieBreakValues.at(2);
+            secondTieBreaker = tieBreakValues.at(CONST_HIGH_POS_TWO_1);
+            thirdTieBreaker = tieBreakValues.at(CONST_HIGH_POS_TWO_2);
+            fourthTieBreaker = tieBreakValues.at(CONST_HIGH_POS_TWO_3);
         }
 
         if (counter == THREE_OF_A_KIND_VALUE)
         {
+            //descriptive int const val to indicate what position to always grab the highest value card for tiebreaker testing
+            int const CONST_HIGH_POS_THREE = 2;
 
-            pokerRank threeOfAKindRank = hand.at(2).rank;
+            pokerRank threeOfAKindRank = hand.at(CONST_HIGH_POS_THREE).rank;
 
             firstTieBreaker = threeOfAKindRank;
         }
 
         if (counter == FOUR_OF_A_KIND_VALUE)
         {
-            firstTieBreaker = hand.at(3).rank;
+            //descriptive int const val to indicate what position to always grab the highest value card for tiebreaker testing
+            int const CONST_HIGH_POS_FOUR = 3;
+
+            firstTieBreaker = hand.at(CONST_HIGH_POS_FOUR).rank;
         }
 
         return true;
@@ -503,20 +534,27 @@ bool findXofaKind(std::vector<Card<Suit, pokerRank>> &hand, int x, pokerRank &fi
     return false;
 }
 
+// overloaded < to compare nested hold struct, which is inside values struct, which is inside the HoldEmGame class
 bool operator<(const HoldEmGame::values::hold &x, const HoldEmGame::values::hold &y)
 {
+    //descriptive int const vals to always grab the tiebreaker cards at specific position in hand
+    int const TIEBREAK_POS1 = 0;
+    int const TIEBREAK_POS2 = 1;
+    int const TIEBREAK_POS3 = 2;
+    int const TIEBREAK_POS4 = 3;
+    int const TIEBREAK_POS5 = 4;
 
-    int xFirstTieBreaker = static_cast<int>(x.tieBreakers.at(0));
-    int xSecondTieBreaker = static_cast<int>(x.tieBreakers.at(1));
-    int xThirdBreaker = static_cast<int>(x.tieBreakers.at(2));
-    int xFourthTieBreaker = static_cast<int>(x.tieBreakers.at(3));
-    int xFifthTieBreaker = static_cast<int>(x.tieBreakers.at(4));
+    int xFirstTieBreaker = static_cast<int>(x.tieBreakers.at(TIEBREAK_POS1));
+    int xSecondTieBreaker = static_cast<int>(x.tieBreakers.at(TIEBREAK_POS2));
+    int xThirdBreaker = static_cast<int>(x.tieBreakers.at(TIEBREAK_POS3));
+    int xFourthTieBreaker = static_cast<int>(x.tieBreakers.at(TIEBREAK_POS4));
+    int xFifthTieBreaker = static_cast<int>(x.tieBreakers.at(TIEBREAK_POS5));
 
-    int yFirstTieBreaker = static_cast<int>(y.tieBreakers.at(0));
-    int ySecondTieBreaker = static_cast<int>(y.tieBreakers.at(1));
-    int yThirdTieBreaker = static_cast<int>(y.tieBreakers.at(2));
-    int yFourthTieBreaker = static_cast<int>(y.tieBreakers.at(3));
-    int yFifthTieBreaker = static_cast<int>(y.tieBreakers.at(4));
+    int yFirstTieBreaker = static_cast<int>(y.tieBreakers.at(TIEBREAK_POS1));
+    int ySecondTieBreaker = static_cast<int>(y.tieBreakers.at(TIEBREAK_POS2));
+    int yThirdTieBreaker = static_cast<int>(y.tieBreakers.at(TIEBREAK_POS3));
+    int yFourthTieBreaker = static_cast<int>(y.tieBreakers.at(TIEBREAK_POS4));
+    int yFifthTieBreaker = static_cast<int>(y.tieBreakers.at(TIEBREAK_POS5));
 
     if (static_cast<int>(x.holdEmHandRank) < static_cast<int>(y.holdEmHandRank))
     {

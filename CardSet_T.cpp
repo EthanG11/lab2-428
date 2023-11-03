@@ -9,7 +9,7 @@
 template <typename Suit, typename Rank>
 void CardSet<Suit, Rank>::print(std::ostream &o, size_t cardsPerLine)
 {
-
+    //initialize counter to 0 as there are no cards on the line yet
     size_t counter = 0;
 
     for (typename std::vector<Card<Suit, Rank>>::iterator i = cards.begin(); i != cards.end(); i++)
